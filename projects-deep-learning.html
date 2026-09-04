@@ -282,6 +282,8 @@
   .project-links{display:flex;flex-direction:column;gap:10px;align-items:flex-end;padding-top:4px;min-width:100px;}
   .project-links a{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:6px;white-space:nowrap;}
   .project-links a:hover{color:var(--accent);}
+  .project-links span{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+  a.project:hover .project-links span{color:var(--accent);}
 
   @media(max-width:700px){
     .project{grid-template-columns:40px 1fr;}
@@ -415,15 +417,32 @@
   <section style="padding-top:0;">
     <div class="wrap">
       <div class="project-group" style="margin-top:0;">
-        <div class="group-head reveal"><h3>Deep Learning &amp; Computer Vision</h3><span class="group-tag">0 PROJECTS</span></div>
+        <div class="group-head reveal"><h3>Deep Learning &amp; Computer Vision</h3><span class="group-tag">1 PROJECT</span></div>
         <p class="group-note reveal">Perception models that let a robot recognize and act on what it sees.</p>
 
         <div class="project-list">
 
-          <div class="project-empty reveal">
-            <span class="project-empty-label">Coming soon</span>
-            <p>New deep learning &amp; computer vision work is in progress — check back shortly.</p>
-          </div>
+          <a class="project reveal" href="project-medical-image-classifier.html">
+            <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4" xmlns="http://www.w3.org/2000/svg">
+              <rect x="5" y="4" width="24" height="26" rx="1"/>
+              <path d="M10 12h14M10 17h14M10 22h9"/>
+              <circle cx="24" cy="24" r="5.5"/>
+              <path d="M24 22v4M22 24h4"/>
+            </svg>
+            <div>
+              <h4 class="project-title">Medical Image Classifier</h4>
+              <p class="project-desc">A CNN trained on the MedNIST dataset to sort scans into six modalities — AbdomenCT, BreastMRI, ChestCT, CXR, Hand and HeadCT. Runs entirely in the browser: upload an image and the model classifies it on the spot.</p>
+              <div class="project-tags">
+                <span class="tag">TensorFlow / Keras</span>
+                <span class="tag">CNN</span>
+                <span class="tag">TensorFlow.js</span>
+                <span class="tag">MedNIST</span>
+              </div>
+            </div>
+            <div class="project-links">
+              <span>Try it ↗</span>
+            </div>
+          </a>
 
         </div>
       
