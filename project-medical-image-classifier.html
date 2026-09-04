@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Medical Image Classifier — Mohamed Ali Zouari</title>
 <meta name="description" content="A CNN trained on MedNIST that classifies medical scans by modality, running live in the browser via TensorFlow.js.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>(function(){var t=localStorage.getItem("theme");if(t==="light"||(!t&&window.matchMedia("(prefers-color-scheme: light)").matches)){document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -239,7 +241,7 @@
 
 <header>
   <nav>
-    <a class="logo" href="index.html"><span class="dot"></span>M.A.ZOUARI</a>
+    <a class="logo" href="index.html"><span class="dot"></span>Mohamed Ali Zouari</a>
     <div class="nav-links nav-mobile-hide">
       <a href="index.html#projects">Projects</a>
     </div>
@@ -371,13 +373,16 @@
 
   const root = document.documentElement;
   const themeBtn = document.getElementById('themeToggle');
-  const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-  if (prefersLight) root.setAttribute('data-theme', 'light');
 
   themeBtn.addEventListener('click', () => {
     const isLight = root.getAttribute('data-theme') === 'light';
-    if (isLight) root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', 'light');
+    if (isLight) {
+      root.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
   });
 
   /* ---------- classifier ---------- */
