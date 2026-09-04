@@ -253,6 +253,15 @@
   .group-note{font-family:var(--font-mono);font-size:12.5px;color:var(--text-faint);margin-bottom:32px;}
 
   .project-list{display:flex;flex-direction:column;}
+  .project-empty{
+    padding:70px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+  }
+  .project-empty-label{
+    font-family:var(--font-mono);font-size:12px;color:var(--accent);
+    border:1px solid var(--line-strong);padding:5px 11px;
+  }
+  .project-empty p{font-family:var(--font-mono);font-size:13px;color:var(--text-faint);max-width:420px;}
   .project{
     display:grid;grid-template-columns:52px 1fr auto;gap:28px;padding:34px 0;
     border-top:1px solid var(--line);position:relative;
@@ -371,9 +380,7 @@
   <nav>
     <a class="logo" href="index.html"><span class="dot"></span>M.A.ZOUARI</a>
     <div class="nav-links nav-mobile-hide">
-      <a href="index.html#about">About</a>
       <a href="index.html#projects">Projects</a>
-      <a href="index.html#skills">Skills</a>
     </div>
     <div class="nav-icons">
       <a href="https://github.com/MohamedAliZouariEng" target="_blank" rel="noopener" aria-label="GitHub">
@@ -408,81 +415,15 @@
   <section style="padding-top:0;">
     <div class="wrap">
       <div class="project-group" style="margin-top:0;">
-        <div class="group-head reveal"><h3>ROS2 &amp; Gazebo Simulation</h3><span class="group-tag">04 PROJECTS</span></div>
+        <div class="group-head reveal"><h3>ROS2 &amp; Gazebo Simulation</h3><span class="group-tag">0 PROJECTS</span></div>
         <p class="group-note reveal">Motion, navigation and control — built and tested inside Gazebo.</p>
 
         <div class="project-list">
 
-          <article class="project reveal">
-            <div>
-              <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><circle cx="17" cy="19" r="10"/><circle cx="17" cy="19" r="2.6" fill="currentColor" stroke="none"/><circle cx="17" cy="8" r="3"/><line x1="17" y1="11" x2="17" y2="9"/><circle cx="10" cy="27" r="2"/><circle cx="24" cy="27" r="2"/></svg>
-              <div class="project-idx">01</div>
-            </div>
-            <div>
-              <div class="project-title">SLAM &amp; navigation for TurtleBot3</div>
-              <p class="project-desc">Full autonomous navigation stack for a TurtleBot3 Burger using ROS 2 Jazzy, Gazebo and Nav2. SLAM configured with Cartographer for LiDAR-based mapping and localization, enabling real-time path planning and obstacle avoidance.</p>
-              <div class="project-tags">
-                <span class="tag">ROS2 Jazzy</span><span class="tag">Nav2</span><span class="tag">Cartographer SLAM</span><span class="tag">LiDAR</span>
-              </div>
-            </div>
-            <div class="project-links">
-              <a href="https://github.com/MohamedAliZouariEng" target="_blank" rel="noopener">CODE ↗</a>
-              <a href="https://vimeo.com/user242059085" target="_blank" rel="noopener">DEMO ↗</a>
-            </div>
-          </article>
-
-          <article class="project reveal">
-            <div>
-              <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="16" width="24" height="9" rx="2"/><circle cx="10" cy="27" r="2.5"/><circle cx="24" cy="27" r="2.5"/><line x1="17" y1="16" x2="17" y2="9"/><rect x="13" y="5" width="8" height="5" rx="1"/></svg>
-              <div class="project-idx">02</div>
-            </div>
-            <div>
-              <div class="project-title">MIT Duckiebot — urban autonomy</div>
-              <p class="project-desc">Autonomous robot integrating time-of-flight sensors for real-time obstacle avoidance and OpenCV for precise line-following, with Gazebo/ROS simulation used alongside OpenAI frameworks for navigation algorithm development and testing.</p>
-              <div class="project-tags">
-                <span class="tag">ROS</span><span class="tag">Gazebo</span><span class="tag">OpenCV</span><span class="tag">ToF Sensors</span>
-              </div>
-            </div>
-            <div class="project-links">
-              <a href="https://github.com/MohamedAliZouariEng" target="_blank" rel="noopener">CODE ↗</a>
-              <a href="https://vimeo.com/user242059085" target="_blank" rel="noopener">DEMO ↗</a>
-            </div>
-          </article>
-
-          <article class="project reveal">
-            <div>
-              <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="13" width="18" height="10" rx="1"/><circle cx="8" cy="10" r="2"/><circle cx="26" cy="10" r="2"/><circle cx="8" cy="26" r="2"/><circle cx="26" cy="26" r="2"/><path d="M17 9l-3-4M17 9l3-4M17 9v4"/></svg>
-              <div class="project-idx">03</div>
-            </div>
-            <div>
-              <div class="project-title">Four-wheeled obstacle-avoiding robot</div>
-              <p class="project-desc">Designed and simulated a four-wheeled mobile robot in Gazebo, implementing a custom Python obstacle avoidance algorithm driven by laser scanner data for collision-free navigation in industrial environments.</p>
-              <div class="project-tags">
-                <span class="tag">Gazebo</span><span class="tag">Python</span><span class="tag">Laser Scanner</span>
-              </div>
-            </div>
-            <div class="project-links">
-              <a href="https://github.com/MohamedAliZouariEng" target="_blank" rel="noopener">CODE ↗</a>
-            </div>
-          </article>
-
-          <article class="project reveal">
-            <div>
-              <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="14" width="22" height="10" rx="1"/><circle cx="10" cy="26" r="3"/><circle cx="24" cy="26" r="3"/><line x1="17" y1="14" x2="17" y2="8"/><circle cx="17" cy="6" r="2"/><rect x="12" y="16" width="6" height="4"/></svg>
-              <div class="project-idx">04</div>
-            </div>
-            <div>
-              <div class="project-title">Autonomous plant &amp; text detection rover</div>
-              <p class="project-desc">A Leo rover programmed in ROS 2 Jazzy (Gazebo) that navigates autonomously using LiDAR-based obstacle avoidance and zone-based return-to-home logic, while an RGB camera detects green plants and text in the environment.</p>
-              <div class="project-tags">
-                <span class="tag">ROS2 Jazzy</span><span class="tag">Gazebo</span><span class="tag">LiDAR</span>
-              </div>
-            </div>
-            <div class="project-links">
-              <a href="https://github.com/MohamedAliZouariEng" target="_blank" rel="noopener">CODE ↗</a>
-              <a href="https://vimeo.com/user242059085" target="_blank" rel="noopener">DEMO ↗</a>
-            </div>
-          </article>
+          <div class="project-empty reveal">
+            <span class="project-empty-label">Coming soon</span>
+            <p>New ROS2 &amp; Gazebo simulation work is in progress — check back shortly.</p>
+          </div>
 
         </div>
       
