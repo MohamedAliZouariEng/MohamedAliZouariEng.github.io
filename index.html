@@ -26,6 +26,17 @@
     --font-mono:'IBM Plex Mono', monospace;
   }
 
+  [data-theme="light"]{
+    --bg:#f2f0ea;
+    --panel:#ffffff;
+    --panel-light:#faf9f5;
+    --line:#dcd7cb;
+    --line-strong:#bdb6a6;
+    --text:#1c2024;
+    --text-dim:#525860;
+    --text-faint:#8b8a80;
+  }
+
   *{margin:0;padding:0;box-sizing:border-box;}
 
   html{scroll-behavior:smooth;}
@@ -37,7 +48,34 @@
     font-size:16px;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
+    transition:background .25s ease, color .25s ease;
   }
+  [data-theme="light"] .grid-bg{opacity:0.55;}
+  [data-theme="light"] .portrait-frame img{filter:grayscale(1) contrast(1.05) brightness(1.02);}
+
+  /* ---------- cursor spotlight ---------- */
+  .spotlight{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background:radial-gradient(560px circle at var(--sx,50%) var(--sy,20%), rgba(255,106,43,0.10), transparent 42%);
+  }
+  @media(max-width:760px){.spotlight{display:none;}}
+
+  /* ---------- scroll reveal ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+
+  /* ---------- tilt ---------- */
+  .tilt{transition:transform .25s ease;transform-style:preserve-3d;}
 
   a{color:inherit;text-decoration:none;}
 
@@ -117,6 +155,25 @@
   .nav-icons svg{width:18px;height:18px;display:block;}
   .nav-mobile-hide{display:flex;}
 
+  .theme-toggle{
+    background:none;
+    border:1px solid var(--line-strong);
+    color:var(--text-dim);
+    width:32px;height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:color .15s ease, border-color .15s ease;
+    padding:0;
+  }
+  .theme-toggle:hover{color:var(--accent);border-color:var(--accent);}
+  .theme-toggle svg{width:15px;height:15px;}
+  .theme-toggle .icon-moon{display:block;}
+  .theme-toggle .icon-sun{display:none;}
+  [data-theme="light"] .theme-toggle .icon-moon{display:none;}
+  [data-theme="light"] .theme-toggle .icon-sun{display:block;}
+
   @media (max-width:760px){
     .nav-links{display:none;}
   }
@@ -130,7 +187,45 @@
     padding-top:120px;
     padding-bottom:80px;
     position:relative;
+    overflow:hidden;
   }
+  .scan-line{
+    position:absolute;
+    left:0;right:0;top:0;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity:0.6;
+    animation:scanY 7s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes scanY{
+    0%{transform:translateY(0);opacity:0;}
+    10%{opacity:.6;}
+    50%{transform:translateY(70vh);opacity:.6;}
+    90%{opacity:0;}
+    100%{transform:translateY(100vh);opacity:0;}
+  }
+  @media(prefers-reduced-motion:reduce){.scan-line{display:none;}}
+
+  .arm-graphic{
+    position:absolute;
+    right:-60px;
+    top:50%;
+    transform:translateY(-50%);
+    width:420px;
+    height:420px;
+    opacity:0.16;
+    pointer-events:none;
+    z-index:0;
+  }
+  [data-theme="light"] .arm-graphic{opacity:0.12;}
+  @media(max-width:1100px){.arm-graphic{display:none;}}
+  .arm-graphic .joint{transform-origin:center;animation:armSway 8s ease-in-out infinite;}
+  @keyframes armSway{
+    0%,100%{transform:rotate(0deg);}
+    50%{transform:rotate(6deg);}
+  }
+  @media(prefers-reduced-motion:reduce){.arm-graphic .joint{animation:none;}}
 
   .hero-grid{
     display:grid;
@@ -306,6 +401,35 @@
   }
   @media(max-width:700px){.section-sub{text-align:left;}}
 
+  /* ---------- stats ---------- */
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .stat{
+    background:var(--bg);
+    padding:30px 26px;
+    transition:background .2s ease;
+  }
+  .stat:hover{background:var(--panel-light);}
+  .stat-num{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2rem,4vw,3rem);
+    color:var(--accent);
+    line-height:1;
+  }
+  .stat-label{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--text-dim);
+    margin-top:10px;
+  }
+  @media(max-width:700px){.stats-grid{grid-template-columns:1fr 1fr;}}
+
   /* ---------- about ---------- */
   .about-grid{
     display:grid;
@@ -370,22 +494,28 @@
 
   .project{
     display:grid;
-    grid-template-columns:64px 1fr auto;
+    grid-template-columns:52px 1fr auto;
     gap:28px;
     padding:34px 0;
     border-top:1px solid var(--line);
     position:relative;
-    transition:padding-left .2s ease;
+    transition:padding-left .2s ease, background .2s ease;
   }
   .project:last-child{border-bottom:1px solid var(--line);}
-  .project:hover{padding-left:8px;}
+  .project:hover{padding-left:8px;background:var(--panel-light);}
   .project:hover .project-title{color:var(--accent);}
+  .project:hover .project-icon{color:var(--accent);transform:scale(1.08) rotate(-4deg);}
 
+  .project-icon{
+    width:34px;height:34px;
+    color:var(--text-faint);
+    transition:color .25s ease, transform .25s ease;
+  }
   .project-idx{
     font-family:var(--font-mono);
-    font-size:12px;
+    font-size:11px;
     color:var(--text-faint);
-    padding-top:4px;
+    margin-top:8px;
   }
 
   .project-title{
@@ -434,7 +564,7 @@
   .project-links svg{width:13px;height:13px;}
 
   @media(max-width:700px){
-    .project{grid-template-columns:36px 1fr;}
+    .project{grid-template-columns:40px 1fr;}
     .project-links{grid-column:1/-1;flex-direction:row;align-items:center;margin-top:14px;}
   }
 
@@ -492,10 +622,26 @@
     background:var(--line);
     border:1px solid var(--line);
   }
-  .skill-cell{
-    background:var(--bg);
-    padding:28px;
+  .skill-cell{background:var(--bg);padding:28px;position:relative;}
+  .net-graphic{
+    position:absolute;
+    top:0;right:0;
+    width:70%;
+    height:100%;
+    opacity:0.12;
+    pointer-events:none;
   }
+  .net-node{animation:nodePulse 3s ease-in-out infinite;}
+  .net-node:nth-child(2){animation-delay:.4s;}
+  .net-node:nth-child(3){animation-delay:.8s;}
+  .net-node:nth-child(4){animation-delay:1.2s;}
+  .net-node:nth-child(5){animation-delay:1.6s;}
+  .net-node:nth-child(6){animation-delay:2s;}
+  @keyframes nodePulse{
+    0%,100%{opacity:0.4;}
+    50%{opacity:1;}
+  }
+  @media(prefers-reduced-motion:reduce){.net-node{animation:none;}}
   .skill-cat{
     font-family:var(--font-mono);
     font-size:12px;
@@ -595,6 +741,7 @@
 <body>
 
 <div class="grid-bg" aria-hidden="true"></div>
+<div class="spotlight" id="spotlight" aria-hidden="true"></div>
 
 <header>
   <nav>
@@ -615,6 +762,10 @@
       <a href="https://vimeo.com/user242059085" target="_blank" rel="noopener" aria-label="Vimeo">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.98 6.6c-.11 2.3-1.72 5.46-4.83 9.46C15.94 20.24 13.32 22 11.2 22c-1.31 0-2.42-1.21-3.33-3.63L6 13.15C5.3 10.73 4.55 9.52 3.75 9.52c-.17 0-.78.37-1.82 1.1L.86 9.3c1.15-1.01 2.29-2.02 3.42-3.04C5.76 4.98 6.87 4.32 7.6 4.25c1.65-.16 2.66.97 3.03 3.39.4 2.62.68 4.25.83 4.87.46 2.1.98 3.15 1.54 3.15.44 0 1.1-.7 1.98-2.09.88-1.39 1.35-2.45 1.42-3.19.13-1.21-.35-1.82-1.44-1.82-.51 0-1.04.12-1.59.35 1.06-3.46 3.08-5.14 6.07-5.04 2.21.07 3.26 1.5 3.14 4.13Z"/></svg>
       </a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12H5M19 12h2.5M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+      </button>
     </div>
   </nav>
 </header>
@@ -623,6 +774,21 @@
 
   <!-- HERO -->
   <section class="hero" style="border-top:none;padding-top:120px;">
+    <div class="scan-line" aria-hidden="true"></div>
+    <svg class="arm-graphic" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="200" cy="200" r="150" stroke="var(--line-strong)" stroke-width="1"/>
+      <circle cx="200" cy="200" r="100" stroke="var(--line-strong)" stroke-width="1"/>
+      <g class="joint">
+        <circle cx="200" cy="200" r="14" fill="var(--accent)"/>
+        <line x1="200" y1="200" x2="200" y2="90" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/>
+        <g class="joint" style="transform-origin:200px 90px;">
+          <circle cx="200" cy="90" r="10" fill="var(--blue)"/>
+          <line x1="200" y1="90" x2="300" y2="60" stroke="var(--blue)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="300" cy="60" r="7" fill="var(--text)"/>
+        </g>
+      </g>
+      <circle cx="200" cy="200" r="3" fill="var(--text)"/>
+    </svg>
     <div class="wrap">
       <div class="hero-grid">
         <div>
@@ -636,7 +802,7 @@
           </div>
         </div>
         <div class="portrait">
-          <div class="portrait-frame">
+          <div class="portrait-frame tilt" id="portraitTilt">
             <img src="assets/portrait.png" alt="Portrait of Mohamed Ali Zouari">
           </div>
           <div class="portrait-cap"><span>M.A.ZOUARI</span><span>SFAX, TN</span></div>
@@ -647,6 +813,30 @@
       LAT 34.7406° N — LON 10.7603° E<br>
       SFAX, TUNISIA<br>
       SYS: ROS2 JAZZY / GAZEBO SIM
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats" style="padding:0 0 90px;border-top:none;">
+    <div class="wrap">
+      <div class="stats-grid">
+        <div class="stat reveal">
+          <div class="stat-num" data-count="6">0</div>
+          <div class="stat-label">Robots simulated</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-num" data-count="3">0</div>
+          <div class="stat-label">ROS distros used</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-num" data-count="1">0</div>
+          <div class="stat-label">Humanoid pick &amp; place system</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-num" data-nocount="true">2025</div>
+          <div class="stat-label">Capstone project year</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -668,7 +858,7 @@
           <p>Currently completing a diploma in Industrial Computer Engineering at ENET'COM, Sfax.</p>
         </div>
 
-        <div class="readout">
+        <div class="readout reveal">
           <div class="readout-row"><span>LOCATION</span><span>Sfax, Tunisia</span></div>
           <div class="readout-row"><span>FOCUS</span><span>Robotics · AI · ROS2</span></div>
           <div class="readout-row"><span>PLATFORMS</span><span>ROS1 / ROS2 / Gazebo / RViz</span></div>
@@ -699,8 +889,11 @@
 
       <div class="project-list" id="projectList">
 
-        <article class="project" data-cat="ros dl">
-          <div class="project-idx">01</div>
+        <article class="project reveal" data-cat="ros dl">
+          <div>
+            <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><circle cx="17" cy="7" r="4"/><line x1="17" y1="11" x2="17" y2="20"/><line x1="17" y1="14" x2="9" y2="18"/><line x1="17" y1="14" x2="25" y2="18"/><path d="M13 20h8l-1 6h-6z"/><line x1="17" y1="26" x2="17" y2="31"/></svg>
+            <div class="project-idx">01</div>
+          </div>
           <div>
             <div class="project-title">AI-driven humanoid pick-and-place</div>
             <p class="project-desc">Autonomous pick-and-place system for a wheeled humanoid robot in ROS 2. Configured controllers, depth camera and Gazebo world; an AI model classifies box types while inverse kinematics computes grasp trajectories. The robot locates, picks, transports and places a target box, then returns to origin. Capstone project for Dia Industries.</p>
@@ -714,8 +907,11 @@
           </div>
         </article>
 
-        <article class="project" data-cat="ros dl">
-          <div class="project-idx">02</div>
+        <article class="project reveal" data-cat="ros dl">
+          <div>
+            <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="14" width="22" height="10" rx="1"/><circle cx="10" cy="26" r="3"/><circle cx="24" cy="26" r="3"/><line x1="17" y1="14" x2="17" y2="8"/><circle cx="17" cy="6" r="2"/><rect x="12" y="16" width="6" height="4"/></svg>
+            <div class="project-idx">02</div>
+          </div>
           <div>
             <div class="project-title">Autonomous plant &amp; text detection rover</div>
             <p class="project-desc">A Leo rover programmed in ROS 2 Jazzy (Gazebo) that navigates autonomously using LiDAR-based obstacle avoidance and zone-based return-to-home logic, while an RGB camera detects green plants and text in the environment.</p>
@@ -729,8 +925,11 @@
           </div>
         </article>
 
-        <article class="project" data-cat="ros">
-          <div class="project-idx">03</div>
+        <article class="project reveal" data-cat="ros">
+          <div>
+            <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><circle cx="17" cy="19" r="10"/><circle cx="17" cy="19" r="2.6" fill="currentColor" stroke="none"/><circle cx="17" cy="8" r="3"/><line x1="17" y1="11" x2="17" y2="9"/><circle cx="10" cy="27" r="2"/><circle cx="24" cy="27" r="2"/></svg>
+            <div class="project-idx">03</div>
+          </div>
           <div>
             <div class="project-title">SLAM &amp; navigation for TurtleBot3</div>
             <p class="project-desc">Full autonomous navigation stack for a TurtleBot3 Burger using ROS 2 Jazzy, Gazebo and Nav2. SLAM configured with Cartographer for LiDAR-based mapping and localization, enabling real-time path planning and obstacle avoidance.</p>
@@ -744,8 +943,11 @@
           </div>
         </article>
 
-        <article class="project" data-cat="ros dl">
-          <div class="project-idx">04</div>
+        <article class="project reveal" data-cat="ros dl">
+          <div>
+            <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="16" width="24" height="9" rx="2"/><circle cx="10" cy="27" r="2.5"/><circle cx="24" cy="27" r="2.5"/><line x1="17" y1="16" x2="17" y2="9"/><rect x="13" y="5" width="8" height="5" rx="1"/></svg>
+            <div class="project-idx">04</div>
+          </div>
           <div>
             <div class="project-title">MIT Duckiebot — urban autonomy</div>
             <p class="project-desc">Autonomous robot integrating time-of-flight sensors for real-time obstacle avoidance and OpenCV for precise line-following, with Gazebo/ROS simulation used alongside OpenAI frameworks for navigation algorithm development and testing.</p>
@@ -759,8 +961,11 @@
           </div>
         </article>
 
-        <article class="project" data-cat="ros">
-          <div class="project-idx">05</div>
+        <article class="project reveal" data-cat="ros">
+          <div>
+            <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="13" width="18" height="10" rx="1"/><circle cx="8" cy="10" r="2"/><circle cx="26" cy="10" r="2"/><circle cx="8" cy="26" r="2"/><circle cx="26" cy="26" r="2"/><path d="M17 9l-3-4M17 9l3-4M17 9v4"/></svg>
+            <div class="project-idx">05</div>
+          </div>
           <div>
             <div class="project-title">Four-wheeled obstacle-avoiding robot</div>
             <p class="project-desc">Designed and simulated a four-wheeled mobile robot in Gazebo, implementing a custom Python obstacle avoidance algorithm driven by laser scanner data for collision-free navigation in industrial environments.</p>
@@ -773,8 +978,11 @@
           </div>
         </article>
 
-        <article class="project" data-cat="dl">
-          <div class="project-idx">06</div>
+        <article class="project reveal" data-cat="dl">
+          <div>
+            <svg class="project-icon" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="4" width="6" height="10" rx="1"/><line x1="17" y1="14" x2="17" y2="20"/><path d="M17 20l-6 4M17 20l6 4"/><path d="M9 24l2 3M25 24l-2 3"/></svg>
+            <div class="project-idx">06</div>
+          </div>
           <div>
             <div class="project-title">Vision-guided pick &amp; place — NED2</div>
             <p class="project-desc">Programmed a Niryo Ned2 manipulator with a ROS Melodic application using OpenCV for real-time vision processing, enabling precise detection and localization of objects for automated pick-and-place tasks.</p>
@@ -803,25 +1011,25 @@
       </div>
 
       <div class="timeline">
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">AUG 2023 · SFAX</div>
           <div class="tl-title">Obstacle-avoiding robot — Internship</div>
           <div class="tl-org">International Measurement Control Engineering (IMSR)</div>
           <div class="tl-desc">Designed and simulated a four-wheeled mobile robot in Gazebo with a custom Python obstacle avoidance algorithm using laser scanner data.</div>
         </div>
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">APR 2024 · SFAX</div>
           <div class="tl-title">MIT Duckiebot — End of year project</div>
           <div class="tl-org">Advancing Urban Autonomy with ROS &amp; Gazebo</div>
           <div class="tl-desc">Integrated ToF sensors and OpenCV line-following with Gazebo/ROS simulation and OpenAI frameworks for navigation algorithm development.</div>
         </div>
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">JUN 2024 · SFAX</div>
           <div class="tl-title">Pick and place with NED2 — Internship</div>
           <div class="tl-org">Technology Development System (TDS)</div>
           <div class="tl-desc">Built a ROS Melodic application for the Niryo Ned2 manipulator using OpenCV for real-time object detection and localization.</div>
         </div>
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">FEB – SEP 2025 · SFAX</div>
           <div class="tl-title">AI-driven humanoid robot — Capstone project</div>
           <div class="tl-org">Applied at Dia Industries</div>
@@ -842,37 +1050,60 @@
       </div>
 
       <div class="skills-grid">
-        <div class="skill-cell">
+        <div class="skill-cell reveal">
           <div class="skill-cat">ROBOTICS</div>
           <div class="skill-items">
             <span>ROS1</span><span>ROS2 Jazzy</span><span>Gazebo Sim</span><span>RViz</span><span>Nav2</span><span>Cartographer</span>
           </div>
         </div>
-        <div class="skill-cell">
+        <div class="skill-cell reveal" style="position:relative;overflow:hidden;">
+          <svg class="net-graphic" viewBox="0 0 300 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g stroke="var(--accent)" stroke-width="1">
+              <line x1="20" y1="25" x2="150" y2="15"/>
+              <line x1="20" y1="65" x2="150" y2="15"/>
+              <line x1="20" y1="65" x2="150" y2="65"/>
+              <line x1="20" y1="105" x2="150" y2="65"/>
+              <line x1="20" y1="105" x2="150" y2="115"/>
+              <line x1="150" y1="15" x2="280" y2="45"/>
+              <line x1="150" y1="65" x2="280" y2="45"/>
+              <line x1="150" y1="65" x2="280" y2="90"/>
+              <line x1="150" y1="115" x2="280" y2="90"/>
+            </g>
+            <g fill="var(--text)">
+              <circle class="net-node" cx="20" cy="25" r="3"/>
+              <circle class="net-node" cx="20" cy="65" r="3"/>
+              <circle class="net-node" cx="20" cy="105" r="3"/>
+              <circle class="net-node" cx="150" cy="15" r="3"/>
+              <circle class="net-node" cx="150" cy="65" r="3"/>
+              <circle class="net-node" cx="150" cy="115" r="3"/>
+              <circle class="net-node" cx="280" cy="45" r="3"/>
+              <circle class="net-node" cx="280" cy="90" r="3"/>
+            </g>
+          </svg>
           <div class="skill-cat">AI / VISION</div>
           <div class="skill-items">
             <span>OpenCV</span><span>Object Detection</span><span>Inverse Kinematics</span><span>Sensor Fusion</span>
           </div>
         </div>
-        <div class="skill-cell">
+        <div class="skill-cell reveal">
           <div class="skill-cat">SOFTWARE</div>
           <div class="skill-items">
             <span>Python</span><span>C++</span><span>Embedded C</span>
           </div>
         </div>
-        <div class="skill-cell">
+        <div class="skill-cell reveal">
           <div class="skill-cat">HARDWARE</div>
           <div class="skill-items">
             <span>Jetson Nano</span><span>Raspberry Pi</span><span>STM32</span><span>Arduino</span>
           </div>
         </div>
-        <div class="skill-cell">
+        <div class="skill-cell reveal">
           <div class="skill-cat">SENSORS</div>
           <div class="skill-items">
             <span>LiDAR</span><span>Depth Camera</span><span>ToF</span><span>Laser Scanner</span>
           </div>
         </div>
-        <div class="skill-cell">
+        <div class="skill-cell reveal">
           <div class="skill-cat">MANIPULATORS</div>
           <div class="skill-items">
             <span>Niryo Ned2</span><span>Humanoid Arm</span>
@@ -893,7 +1124,7 @@
   <footer id="contact">
     <div class="wrap">
       <div class="section-num" style="margin-bottom:18px;">05 — GET IN TOUCH</div>
-      <div class="footer-head">Building a robot?<br>Let's talk — <a href="mailto:mohamedalizouari.ai@mail.ru">say hello</a>.</div>
+      <div class="footer-head reveal">Building a robot?<br>Let's talk — <a href="mailto:mohamedalizouari.ai@mail.ru">say hello</a>.</div>
       <p class="footer-sub">Based in Sfax, Tunisia. Open to robotics and AI engineering roles, internships, and collaborations.</p>
 
       <div class="footer-links">
@@ -929,6 +1160,91 @@
 </main>
 
 <script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Cursor spotlight
+  if (!reduceMotion) {
+    const spotlight = document.getElementById('spotlight');
+    window.addEventListener('mousemove', (e) => {
+      spotlight.style.setProperty('--sx', e.clientX + 'px');
+      spotlight.style.setProperty('--sy', e.clientY + 'px');
+    });
+  }
+
+  // Portrait tilt
+  const portraitTilt = document.getElementById('portraitTilt');
+  if (portraitTilt && !reduceMotion) {
+    portraitTilt.addEventListener('mousemove', (e) => {
+      const r = portraitTilt.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      portraitTilt.style.transform = `rotateY(${px * 10}deg) rotateX(${-py * 10}deg)`;
+    });
+    portraitTilt.addEventListener('mouseleave', () => {
+      portraitTilt.style.transform = 'rotateY(0deg) rotateX(0deg)';
+    });
+  }
+
+  // Animated counters
+  function animateCount(el) {
+    const target = parseInt(el.dataset.count, 10);
+    if (isNaN(target)) return;
+    const duration = 900;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target);
+      if (progress < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Scroll reveal with stagger
+  const revealEls = document.querySelectorAll('.reveal');
+  if (reduceMotion) {
+    revealEls.forEach(el => el.classList.add('in-view'));
+    document.querySelectorAll('.stat-num[data-count]').forEach(el => el.textContent = el.dataset.count);
+  } else {
+    const groups = new Map();
+    revealEls.forEach(el => {
+      const parent = el.parentElement;
+      if (!groups.has(parent)) groups.set(parent, []);
+      groups.get(parent).push(el);
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const siblings = groups.get(el.parentElement) || [el];
+          const idx = siblings.indexOf(el);
+          el.style.transitionDelay = (idx * 90) + 'ms';
+          el.classList.add('in-view');
+          const counter = el.matches('.stat-num[data-count]') ? el : el.querySelector('.stat-num[data-count]');
+          if (counter && !counter.dataset.done) {
+            counter.dataset.done = '1';
+            animateCount(counter);
+          }
+          io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  }
+
+  // Theme toggle
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+  if (prefersLight) root.setAttribute('data-theme', 'light');
+
+  themeBtn.addEventListener('click', () => {
+    const isLight = root.getAttribute('data-theme') === 'light';
+    if (isLight) root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', 'light');
+  });
+
   // Project filtering
   const filterBtns = document.querySelectorAll('.filter-btn');
   const projects = document.querySelectorAll('.project');
