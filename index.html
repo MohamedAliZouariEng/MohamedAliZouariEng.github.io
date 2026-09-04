@@ -223,27 +223,6 @@
   .section-sub{font-family:var(--font-mono);font-size:13px;color:var(--text-dim);max-width:280px;text-align:right;}
   @media(max-width:700px){.section-sub{text-align:left;}}
 
-  /* ---------- stats ---------- */
-  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-  .stat{background:var(--bg);padding:30px 26px;transition:background .2s ease;}
-  .stat:hover{background:var(--panel-light);}
-  .stat-num{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,4vw,3rem);color:var(--accent);line-height:1;}
-  .stat-label{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);margin-top:10px;}
-  @media(max-width:700px){.stats-grid{grid-template-columns:1fr 1fr;}}
-
-  /* ---------- about ---------- */
-  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:64px;}
-  @media(max-width:800px){.about-grid{grid-template-columns:1fr;gap:40px;}}
-  .about-text p{font-size:1.05rem;color:var(--text-dim);max-width:560px;}
-  .about-text p + p{margin-top:18px;}
-  .about-text strong{color:var(--text);font-weight:500;}
-
-  .readout{border:1px solid var(--line);padding:22px 24px;}
-  .readout-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-family:var(--font-mono);font-size:13px;}
-  .readout-row:last-child{border-bottom:none;}
-  .readout-row span:first-child{color:var(--text-faint);}
-  .readout-row span:last-child{color:var(--text);text-align:right;}
-
   /* ---------- projects ---------- */
   .project-group{margin-top:70px;}
   .project-group:first-child{margin-top:0;}
@@ -313,29 +292,6 @@
     .group-card:hover{padding-left:26px;}
   }
 
-  /* ---------- skills ---------- */
-  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-  .skill-cell{background:var(--bg);padding:28px;position:relative;overflow:hidden;}
-  .skill-cat{font-family:var(--font-mono);font-size:12px;color:var(--accent);margin-bottom:14px;}
-  .skill-items{display:flex;flex-wrap:wrap;gap:8px;}
-  .skill-items span{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);border:1px solid var(--line-strong);padding:5px 10px;}
-  @media(max-width:760px){.skills-grid{grid-template-columns:1fr;}}
-
-  .net-graphic{position:absolute;top:0;right:0;width:70%;height:100%;opacity:0.12;pointer-events:none;}
-  .net-node{animation:nodePulse 3s ease-in-out infinite;}
-  .net-node:nth-child(2){animation-delay:.4s;}
-  .net-node:nth-child(3){animation-delay:.8s;}
-  .net-node:nth-child(4){animation-delay:1.2s;}
-  .net-node:nth-child(5){animation-delay:1.6s;}
-  .net-node:nth-child(6){animation-delay:2s;}
-  @keyframes nodePulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
-  @media(prefers-reduced-motion:reduce){.net-node{animation:none;}}
-
-  .cert-list{margin-top:56px;}
-  .cert-list h3{font-family:var(--font-mono);font-size:12px;color:var(--text-faint);margin-bottom:16px;font-weight:400;}
-  .cert-item{display:flex;justify-content:space-between;padding:14px 0;border-top:1px solid var(--line);font-size:0.95rem;flex-wrap:wrap;gap:6px;}
-  .cert-item span:last-child{color:var(--text-faint);font-family:var(--font-mono);font-size:12px;}
-
   /* ---------- footer ---------- */
   footer{border-top:1px solid var(--line);padding:48px 0;}
   .footer-bottom{
@@ -357,9 +313,7 @@
   <nav>
     <div class="logo"><span class="dot"></span>M.A.ZOUARI</div>
     <div class="nav-links nav-mobile-hide">
-      <a href="#about">About</a>
       <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
     </div>
     <div class="nav-icons">
       <a href="https://github.com/MohamedAliZouariEng" target="_blank" rel="noopener" aria-label="GitHub">
@@ -425,66 +379,12 @@
     </div>
   </section>
 
-  <!-- STATS -->
-  <section class="stats" style="padding:0 0 90px;border-top:none;">
-    <div class="wrap">
-      <div class="stats-grid">
-        <div class="stat reveal">
-          <div class="stat-num" data-count="6">0</div>
-          <div class="stat-label">Robots simulated</div>
-        </div>
-        <div class="stat reveal">
-          <div class="stat-num" data-count="3">0</div>
-          <div class="stat-label">ROS distros used</div>
-        </div>
-        <div class="stat reveal">
-          <div class="stat-num" data-count="1">0</div>
-          <div class="stat-label">Humanoid pick &amp; place system</div>
-        </div>
-        <div class="stat reveal">
-          <div class="stat-num" data-nocount="true">2025</div>
-          <div class="stat-label">Capstone project year</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <div class="section-num">01 — PROFILE</div>
-          <h2 style="margin-top:10px;">About</h2>
-        </div>
-        <div class="section-sub">Sfax, Tunisia. Available for robotics &amp; AI engineering roles.</div>
-      </div>
-
-      <div class="about-grid">
-        <div class="about-text">
-          <p>I'm an industrial computer engineer specializing in <strong>robotics and ROS</strong> (Robot Operating System), focused on integrating AI into physical systems that solve real industrial automation problems.</p>
-          <p>My work spans the full stack of a robotic project: modeling and controllers, sensor integration (depth cameras, LiDAR, ToF), Gazebo simulation, and the computer vision and deep learning models that let a robot recognize what it's looking at and act on it. Recent work includes a wheeled humanoid pick-and-place system and autonomous navigation stacks built on Nav2 and SLAM.</p>
-          <p>Currently completing a diploma in Industrial Computer Engineering at ENET'COM, Sfax.</p>
-        </div>
-
-        <div class="readout reveal">
-          <div class="readout-row"><span>LOCATION</span><span>Sfax, Tunisia</span></div>
-          <div class="readout-row"><span>FOCUS</span><span>Robotics · AI · ROS2</span></div>
-          <div class="readout-row"><span>PLATFORMS</span><span>ROS1 / ROS2 / Gazebo / RViz</span></div>
-          <div class="readout-row"><span>LANGUAGES (CODE)</span><span>Python, C++</span></div>
-          <div class="readout-row"><span>HARDWARE</span><span>Jetson Nano, RPi, STM32, Arduino</span></div>
-          <div class="readout-row"><span>SPOKEN</span><span>Arabic, English, French</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- PROJECTS -->
-  <section id="projects">
+  <section id="projects" style="border-top:none;">
     <div class="wrap">
       <div class="section-head">
         <div>
-          <div class="section-num">02 — SELECTED WORK</div>
+          <div class="section-num">01 — SELECTED WORK</div>
           <h2 style="margin-top:10px;">Projects</h2>
         </div>
         <div class="section-sub">Simulation, navigation, manipulation and vision — built and tested in Gazebo.</div>
@@ -514,87 +414,6 @@
 
       </div>
 
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section id="skills">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <div class="section-num">03 — STACK</div>
-          <h2 style="margin-top:10px;">Skills</h2>
-        </div>
-      </div>
-
-      <div class="skills-grid">
-        <div class="skill-cell reveal">
-          <div class="skill-cat">ROBOTICS</div>
-          <div class="skill-items">
-            <span>ROS1</span><span>ROS2 Jazzy</span><span>Gazebo Sim</span><span>RViz</span><span>Nav2</span><span>Cartographer</span>
-          </div>
-        </div>
-        <div class="skill-cell reveal" style="position:relative;overflow:hidden;">
-          <svg class="net-graphic" viewBox="0 0 300 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g stroke="var(--accent)" stroke-width="1">
-              <line x1="20" y1="25" x2="150" y2="15"/>
-              <line x1="20" y1="65" x2="150" y2="15"/>
-              <line x1="20" y1="65" x2="150" y2="65"/>
-              <line x1="20" y1="105" x2="150" y2="65"/>
-              <line x1="20" y1="105" x2="150" y2="115"/>
-              <line x1="150" y1="15" x2="280" y2="45"/>
-              <line x1="150" y1="65" x2="280" y2="45"/>
-              <line x1="150" y1="65" x2="280" y2="90"/>
-              <line x1="150" y1="115" x2="280" y2="90"/>
-            </g>
-            <g fill="var(--text)">
-              <circle class="net-node" cx="20" cy="25" r="3"/>
-              <circle class="net-node" cx="20" cy="65" r="3"/>
-              <circle class="net-node" cx="20" cy="105" r="3"/>
-              <circle class="net-node" cx="150" cy="15" r="3"/>
-              <circle class="net-node" cx="150" cy="65" r="3"/>
-              <circle class="net-node" cx="150" cy="115" r="3"/>
-              <circle class="net-node" cx="280" cy="45" r="3"/>
-              <circle class="net-node" cx="280" cy="90" r="3"/>
-            </g>
-          </svg>
-          <div class="skill-cat">AI / VISION</div>
-          <div class="skill-items">
-            <span>OpenCV</span><span>Object Detection</span><span>Inverse Kinematics</span><span>Sensor Fusion</span>
-          </div>
-        </div>
-        <div class="skill-cell reveal">
-          <div class="skill-cat">SOFTWARE</div>
-          <div class="skill-items">
-            <span>Python</span><span>C++</span><span>Embedded C</span>
-          </div>
-        </div>
-        <div class="skill-cell reveal">
-          <div class="skill-cat">HARDWARE</div>
-          <div class="skill-items">
-            <span>Jetson Nano</span><span>Raspberry Pi</span><span>STM32</span><span>Arduino</span>
-          </div>
-        </div>
-        <div class="skill-cell reveal">
-          <div class="skill-cat">SENSORS</div>
-          <div class="skill-items">
-            <span>LiDAR</span><span>Depth Camera</span><span>ToF</span><span>Laser Scanner</span>
-          </div>
-        </div>
-        <div class="skill-cell reveal">
-          <div class="skill-cat">MANIPULATORS</div>
-          <div class="skill-items">
-            <span>Niryo Ned2</span><span>Humanoid Arm</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="cert-list">
-        <h3>CERTIFICATIONS</h3>
-        <div class="cert-item"><span>Code Foundation (Python &amp; C++) for ROS</span><span>The Construct</span></div>
-        <div class="cert-item"><span>Foundations of Robot Motion, Kinematics &amp; Dynamics</span><span>Northwestern University</span></div>
-        <div class="cert-item"><span>Embedded C Programming Essentials</span><span>Educba</span></div>
-      </div>
     </div>
   </section>
 
@@ -635,27 +454,10 @@
     });
   }
 
-  // Animated counters
-  function animateCount(el) {
-    const target = parseInt(el.dataset.count, 10);
-    if (isNaN(target)) return;
-    const duration = 900;
-    const start = performance.now();
-    function tick(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target);
-      if (progress < 1) requestAnimationFrame(tick);
-      else el.textContent = target;
-    }
-    requestAnimationFrame(tick);
-  }
-
   // Scroll reveal with stagger
   const revealEls = document.querySelectorAll('.reveal');
   if (reduceMotion) {
     revealEls.forEach(el => el.classList.add('in-view'));
-    document.querySelectorAll('.stat-num[data-count]').forEach(el => el.textContent = el.dataset.count);
   } else {
     const groups = new Map();
     revealEls.forEach(el => {
@@ -671,11 +473,6 @@
           const idx = siblings.indexOf(el);
           el.style.transitionDelay = (idx * 90) + 'ms';
           el.classList.add('in-view');
-          const counter = el.matches('.stat-num[data-count]') ? el : el.querySelector('.stat-num[data-count]');
-          if (counter && !counter.dataset.done) {
-            counter.dataset.done = '1';
-            animateCount(counter);
-          }
           io.unobserve(el);
         }
       });
