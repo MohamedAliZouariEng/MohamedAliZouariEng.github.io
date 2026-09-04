@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mohamed Ali Zouari — Robotics &amp; AI Engineer</title>
 <meta name="description" content="Portfolio of Mohamed Ali Zouari — ROS2 Jazzy, Gazebo simulation and deep learning projects.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>(function(){var t=localStorage.getItem("theme");if(t==="light"||(!t&&window.matchMedia("(prefers-color-scheme: light)").matches)){document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -311,7 +313,7 @@
 
 <header>
   <nav>
-    <div class="logo"><span class="dot"></span>M.A.ZOUARI</div>
+    <div class="logo"><span class="dot"></span>Mohamed Ali Zouari</div>
     <div class="nav-links nav-mobile-hide">
       <a href="#projects">Projects</a>
     </div>
@@ -356,7 +358,7 @@
       <div class="hero-grid">
         <div>
           <div class="hero-eyebrow">INDUSTRIAL COMPUTER ENGINEER — ROBOTICS &amp; AI</div>
-          <h1>Mohamed Ali<br>Zouari.</h1>
+          <h1>Mohamed Ali<br>Zouari</h1>
           <p class="hero-role">I design and simulate <strong>ROS2 &amp; Gazebo</strong> robotic systems and build the <strong>deep learning</strong> models that let them see, navigate and manipulate their world.</p>
           <div class="hero-actions">
             <a href="#projects" class="btn btn-primary">View projects</a>
@@ -483,13 +485,16 @@
   // Theme toggle
   const root = document.documentElement;
   const themeBtn = document.getElementById('themeToggle');
-  const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-  if (prefersLight) root.setAttribute('data-theme', 'light');
 
   themeBtn.addEventListener('click', () => {
     const isLight = root.getAttribute('data-theme') === 'light';
-    if (isLight) root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', 'light');
+    if (isLight) {
+      root.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
   });
 </script>
 
