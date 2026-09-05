@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Automatic Number Plate Recognition — Mohamed Ali Zouari</title>
-<meta name="description" content="A classical computer-vision pipeline — Sobel edges, contour filtering and Tesseract OCR — that finds and reads vehicle number plates, running live in the browser.">
+<meta name="description" content="A classical computer-vision pipeline — bilateral filtering, Canny edges, polygon contour filtering and Tesseract OCR — that finds and reads vehicle number plates, running live in the browser.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <script>(function(){var t=localStorage.getItem("theme");if(t==="light"||(!t&&window.matchMedia("(prefers-color-scheme: light)").matches)){document.documentElement.setAttribute("data-theme","light");}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -272,11 +272,12 @@
     <div class="wrap">
       <a class="back-link" href="projects-deep-learning.html">← Back to Deep Learning &amp; Computer Vision</a>
       <h1>Automatic Number Plate Recognition</h1>
-      <p>A classical computer-vision pipeline that locates a vehicle's number plate in a photo and reads its characters — no neural network involved. Sobel edge detection and contour geometry find the plate-shaped region, a threshold pass isolates the characters, and Tesseract OCR reads the text. Everything runs client-side: nothing you upload leaves your browser.</p>
+      <p>A classical computer-vision pipeline that locates a vehicle's number plate in a photo and reads its characters — no neural network involved. A bilateral filter cleans up noise while keeping edges sharp, Canny edge detection finds boundaries, and contour geometry picks out the 4-sided, plate-shaped region. An Otsu threshold isolates the characters (auto-inverting so text is always dark-on-light), and Tesseract OCR reads the result. Everything runs client-side: nothing you upload leaves your browser.</p>
       <div class="hero-tags">
         <span class="tag">OpenCV</span>
-        <span class="tag">Sobel + Otsu</span>
-        <span class="tag">Contour filtering</span>
+        <span class="tag">Bilateral filter</span>
+        <span class="tag">Canny + Contours</span>
+        <span class="tag">Otsu threshold</span>
         <span class="tag">Tesseract OCR</span>
         <span class="tag">OpenCV.js</span>
       </div>
@@ -325,30 +326,32 @@
           </div>
 
           <div class="note">
-            <strong>What this does:</strong> it looks for a plate-shaped region using edge and contour geometry — the same aspect-ratio and rotation checks as the original notebook — then hands the isolated characters to an OCR engine. It has no learned notion of what a plate "looks like" beyond its shape, so busy backgrounds, steep angles or low contrast can fool the filter, exactly like the source pipeline it's built from.
+            <strong>What this does:</strong> it walks the 30 largest contours in the image, keeps the ones that approximate to a 4-sided polygon with a plate-like aspect ratio (2.0–6.0) and a minimum size, then runs each candidate — largest first — through an Otsu threshold and Tesseract OCR, stopping at the first one that yields 3 or more characters. It has no learned notion of what a plate "looks like" beyond its shape, so busy backgrounds, missing rectangular edges or low contrast can fool the filter, exactly like the source notebook it's built from.
           </div>
         </div>
 
         <div class="demo-panel">
           <div class="panel-label"><span>PIPELINE</span></div>
           <div class="readout" id="pipelineReadout">
-            <div class="readout-row"><span>1. Grayscale + Gaussian blur</span><span id="stepBlur">—</span></div>
-            <div class="readout-row"><span>2. Sobel edge (x-axis)</span><span id="stepSobel">—</span></div>
-            <div class="readout-row"><span>3. Otsu threshold</span><span id="stepThresh">—</span></div>
-            <div class="readout-row"><span>4. Morphological close 17×3</span><span id="stepMorph">—</span></div>
-            <div class="readout-row"><span>5. External contours found</span><span id="stepContours">—</span></div>
-            <div class="readout-row"><span>6. Ratio &amp; rotation filter</span><span id="stepFilter">—</span></div>
-            <div class="readout-row"><span>7. Brightness check</span><span id="stepWhite">—</span></div>
-            <div class="readout-row"><span>8. Character isolation</span><span id="stepClean">—</span></div>
+            <div class="readout-row"><span>1. Grayscale conversion</span><span id="stepGray">—</span></div>
+            <div class="readout-row"><span>2. Bilateral filter (11, 17, 17)</span><span id="stepBlur">—</span></div>
+            <div class="readout-row"><span>3. Canny edges (30–200)</span><span id="stepCanny">—</span></div>
+            <div class="readout-row"><span>4. Top 30 contours by area</span><span id="stepContours">—</span></div>
+            <div class="readout-row"><span>5. 4-sided polygon check</span><span id="stepPoly">—</span></div>
+            <div class="readout-row"><span>6. Ratio &amp; size filter</span><span id="stepFilter">—</span></div>
+            <div class="readout-row"><span>7. Otsu threshold + auto-invert</span><span id="stepThresh">—</span></div>
+            <div class="readout-row"><span>8. OCR pass</span><span id="stepOcr">—</span></div>
           </div>
 
           <div class="class-list">
             <h4>ALGORITHM SPEC</h4>
-            <div class="class-chip"><span>Edge detector</span><span>Sobel (x) + Otsu threshold</span></div>
-            <div class="class-chip"><span>Region filter</span><span>ratio 3–6, angle ≤ 15°</span></div>
-            <div class="class-chip"><span>Morphology kernel</span><span>17 × 3 rect, close</span></div>
-            <div class="class-chip"><span>Character isolation</span><span>fixed threshold, max contour</span></div>
-            <div class="class-chip"><span>OCR engine</span><span>Tesseract.js (eng)</span></div>
+            <div class="class-chip"><span>Noise filter</span><span>Bilateral, d=11, σ=17/17</span></div>
+            <div class="class-chip"><span>Edge detector</span><span>Canny, thresholds 30–200</span></div>
+            <div class="class-chip"><span>Contour scan</span><span>RETR_TREE, top 30 by area</span></div>
+            <div class="class-chip"><span>Region filter</span><span>4-pt polygon · ratio 2–6 · w&gt;60, h&gt;15</span></div>
+            <div class="class-chip"><span>Character isolation</span><span>Otsu threshold, auto-invert if mean &lt; 127</span></div>
+            <div class="class-chip"><span>OCR engine</span><span>Tesseract.js, PSM 6, A–Z0–9 whitelist</span></div>
+            <div class="class-chip"><span>Candidate selection</span><span>first candidate with ≥ 3 chars read</span></div>
             <div class="class-chip"><span>Inference</span><span>OpenCV.js + Tesseract.js, in-browser</span></div>
           </div>
         </div>
@@ -424,7 +427,7 @@
   }
 
   function resetSteps() {
-    ['stepBlur','stepSobel','stepThresh','stepMorph','stepContours','stepFilter','stepWhite','stepClean']
+    ['stepGray','stepBlur','stepCanny','stepContours','stepPoly','stepFilter','stepThresh','stepOcr']
       .forEach(id => setStep(id, '—'));
   }
 
@@ -506,30 +509,36 @@
     resetSteps();
   });
 
-  function findCandidates(contours, imgArea, lenient) {
-    const REF_AREA = 640 * 480;
-    const scale = imgArea / REF_AREA;
-    const areaMin = (lenient ? 300 : 1063.62) * scale;
-    const areaMax = (lenient ? 260000 : 73862.5) * scale;
-    const ratioMin = lenient ? 2 : 3;
-    const ratioMax = lenient ? 9 : 6;
-    const angleMax = lenient ? 30 : 15;
-
-    const out = [];
+  // Mirrors the notebook: sort contours by area (desc), keep the top 30,
+  // then for each one approximate a polygon and keep 4-sided candidates
+  // whose bounding-rect aspect ratio and size look like a plate.
+  function findCandidates(contours) {
+    const withArea = [];
     for (let i = 0; i < contours.size(); i++) {
       const cnt = contours.get(i);
-      const rr = cv.minAreaRect(cnt);
-      const width = rr.size.width, height = rr.size.height;
-      if (width === 0 || height === 0) { cnt.delete(); continue; }
-      const angle = width > height ? -rr.angle : 90 + rr.angle;
-      const area = width * height;
-      let ratio = width / height;
-      if (ratio < 1) ratio = 1 / ratio;
-      if (angle <= angleMax && area >= areaMin && area <= areaMax && ratio >= ratioMin && ratio <= ratioMax) {
-        out.push({ rect: cv.boundingRect(cnt), area, ratio, angle });
-      }
-      cnt.delete();
+      withArea.push({ cnt, area: cv.contourArea(cnt) });
     }
+    withArea.sort((a, b) => b.area - a.area);
+    const top30 = withArea.slice(0, 30);
+
+    const out = [];
+    top30.forEach(({ cnt }) => {
+      const perimeter = cv.arcLength(cnt, true);
+      const approx = new cv.Mat();
+      cv.approxPolyDP(cnt, approx, 0.018 * perimeter, true);
+      const sides = approx.rows;
+      approx.delete();
+
+      if (sides === 4) {
+        const rect = cv.boundingRect(cnt);
+        const aspectRatio = rect.width / rect.height;
+        if (aspectRatio >= 2.0 && aspectRatio <= 6.0 && rect.width > 60 && rect.height > 15) {
+          out.push({ rect, aspectRatio });
+        }
+      }
+    });
+
+    withArea.forEach(({ cnt }) => cnt.delete());
     return out;
   }
 
@@ -547,124 +556,110 @@
     previewCanvas.height = currentImg.naturalHeight;
     pctx.drawImage(currentImg, 0, 0);
 
-    let src, gray, blurred, sobel, thresh, morph, element, contours, hierarchy;
-    let plateColor, plateGray, plateThresh, pc, ph, resized;
+    // 1. cv2.imread('car.jpg')
+    let src, gray, blur, edged, contours, hierarchy;
+    // per-candidate scratch mats, tracked so they're always freed
+    const scratch = [];
 
     try {
       src = cv.imread(previewCanvas);
+
+      // 1. Convert to grayscale
       gray = new cv.Mat();
       cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+      setStep('stepGray', 'done');
 
-      blurred = new cv.Mat();
-      cv.GaussianBlur(gray, blurred, new cv.Size(3, 3), 0);
-      setStep('stepBlur', 'done — 3×3 kernel');
+      // 1. Filter noise: cv2.bilateralFilter(gray, 11, 17, 17)
+      blur = new cv.Mat();
+      cv.bilateralFilter(gray, blur, 11, 17, 17, cv.BORDER_DEFAULT);
+      setStep('stepBlur', 'done — d=11, σ=17/17');
 
-      sobel = new cv.Mat();
-      cv.Sobel(blurred, sobel, cv.CV_8U, 1, 0, 3);
-      setStep('stepSobel', 'done');
+      // 2. Edge detection: cv2.Canny(blur, 30, 200)
+      edged = new cv.Mat();
+      cv.Canny(blur, edged, 30, 200);
+      setStep('stepCanny', 'done — 30–200');
 
-      thresh = new cv.Mat();
-      cv.threshold(sobel, thresh, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU);
-      setStep('stepThresh', 'done — Otsu');
-
-      element = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(17, 3));
-      morph = new cv.Mat();
-      cv.morphologyEx(thresh, morph, cv.MORPH_CLOSE, element);
-      setStep('stepMorph', 'done');
-
+      // 3. Find top contours: RETR_TREE, sorted by area, top 30
       contours = new cv.MatVector();
       hierarchy = new cv.Mat();
-      cv.findContours(morph, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE);
-      setStep('stepContours', contours.size() + ' found');
+      cv.findContours(edged, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+      setStep('stepContours', contours.size() + ' found → top 30 by area');
 
-      const imgArea = src.rows * src.cols;
-      let candidates = findCandidates(contours, imgArea, false);
-      let usedFallback = false;
-      if (candidates.length === 0) {
-        candidates = findCandidates(contours, imgArea, true);
-        usedFallback = true;
-      }
-      setStep('stepFilter', candidates.length + ' passed' + (usedFallback ? ' (relaxed)' : ''));
+      // 4. Locate rectangular candidate regions (4-sided polygon, plate-like ratio)
+      const candidates = findCandidates(contours);
+      setStep('stepPoly', candidates.length + ' four-sided candidate(s)');
+      setStep('stepFilter', candidates.length + ' passed ratio 2–6, w>60, h>15');
 
       if (candidates.length === 0) {
-        setStep('stepWhite', '—');
-        setStep('stepClean', '—');
+        setStep('stepThresh', '—');
+        setStep('stepOcr', '—');
         setStatus('busy', 'No plate-like region found');
         ocrText.textContent = 'No plate detected — try a clearer, front-on photo.';
         resultsEl.style.display = 'flex';
         return;
       }
 
-      candidates.sort((a, b) => Math.abs(a.ratio - 4.3) - Math.abs(b.ratio - 4.3));
-      const best = candidates[0];
-
-      pctx.strokeStyle = '#38bdf8';
-      pctx.lineWidth = Math.max(2, Math.round(src.cols / 300));
-      pctx.strokeRect(best.rect.x, best.rect.y, best.rect.width, best.rect.height);
-
-      const roi = src.roi(new cv.Rect(best.rect.x, best.rect.y, best.rect.width, best.rect.height));
-      plateColor = new cv.Mat();
-      roi.copyTo(plateColor);
-      roi.delete();
-
-      plateGray = new cv.Mat();
-      cv.cvtColor(plateColor, plateGray, cv.COLOR_RGBA2GRAY);
-      const meanVal = cv.mean(plateGray)[0];
-      const isWhite = meanVal >= 90;
-      setStep('stepWhite', meanVal.toFixed(1) + ' avg' + (isWhite ? ' — bright enough' : ' — dim, continuing'));
-
-      plateThresh = new cv.Mat();
-      cv.threshold(plateGray, plateThresh, 110, 255, cv.THRESH_BINARY);
-
-      pc = new cv.MatVector();
-      ph = new cv.Mat();
-      cv.findContours(plateThresh, pc, ph, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE);
-
-      let ocrSourceMat = plateThresh;
-      let ownsOcrSource = false;
-      let cleaned = false;
-      if (pc.size() > 0) {
-        let maxIdx = -1, maxArea = 0;
-        for (let i = 0; i < pc.size(); i++) {
-          const c = pc.get(i);
-          const a = cv.contourArea(c);
-          if (a > maxArea) { maxArea = a; maxIdx = i; }
-          c.delete();
-        }
-        if (maxIdx >= 0) {
-          const maxCnt = pc.get(maxIdx);
-          const bx = cv.boundingRect(maxCnt);
-          maxCnt.delete();
-          if (bx.width > 4 && bx.height > 4) {
-            const cropped = plateThresh.roi(bx);
-            ocrSourceMat = new cv.Mat();
-            cropped.copyTo(ocrSourceMat);
-            cropped.delete();
-            ownsOcrSource = true;
-            cleaned = true;
-          }
-        }
-      }
-      setStep('stepClean', cleaned ? 'isolated character region' : 'used full plate crop');
-
-      cv.imshow(plateCanvas, plateColor);
-
-      const targetH = 120;
-      const scale = targetH / ocrSourceMat.rows;
-      resized = new cv.Mat();
-      cv.resize(ocrSourceMat, resized, new cv.Size(Math.max(1, Math.round(ocrSourceMat.cols * scale)), targetH), 0, 0, cv.INTER_CUBIC);
-      const ocrCanvas = document.createElement('canvas');
-      cv.imshow(ocrCanvas, resized);
-      if (ownsOcrSource) ocrSourceMat.delete();
-
       resultsEl.style.display = 'flex';
       setStatus('busy', 'Reading characters…');
       detectBtn.textContent = 'Reading…';
 
-      const { data: { text } } = await Tesseract.recognize(ocrCanvas, 'eng', {
-        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-      });
-      const cleanText = (text || '').replace(/[^A-Z0-9]/gi, '').toUpperCase();
+      // Loop over candidates (in contour-area order) and OCR each one,
+      // stopping at the first that yields 3+ characters — mirrors the
+      // notebook's `for c in contours: ... if len(extracted_text) >= 3: break`
+      let plateText = '';
+      let winningRect = null;
+      let triedCount = 0;
+
+      for (const { rect } of candidates) {
+        triedCount++;
+
+        // plate_roi = gray[y:y+h, x:x+w]
+        const roi = gray.roi(new cv.Rect(rect.x, rect.y, rect.width, rect.height));
+        const roiCopy = new cv.Mat();
+        roi.copyTo(roiCopy);
+        roi.delete();
+        scratch.push(roiCopy);
+
+        // Binarize with Otsu thresholding
+        const thresh = new cv.Mat();
+        cv.threshold(roiCopy, thresh, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU);
+        scratch.push(thresh);
+
+        // Ensure characters are black on white background
+        const meanVal = cv.mean(thresh)[0];
+        if (meanVal < 127) {
+          cv.bitwise_not(thresh, thresh);
+        }
+        setStep('stepThresh', 'candidate ' + triedCount + '/' + candidates.length +
+          ' — mean ' + meanVal.toFixed(1) + (meanVal < 127 ? ' (inverted)' : ''));
+
+        const ocrCanvas = document.createElement('canvas');
+        cv.imshow(ocrCanvas, thresh);
+
+        // Tesseract OCR config: --oem 3 --psm 6, alphanumeric whitelist
+        const { data: { text } } = await Tesseract.recognize(ocrCanvas, 'eng', {
+          tessedit_pageseg_mode: '6',
+          tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        });
+        const extractedText = (text || '').trim();
+
+        if (extractedText.length >= 3) {
+          plateText = extractedText;
+          winningRect = rect;
+          cv.imshow(plateCanvas, roiCopy);
+          break;
+        }
+      }
+
+      setStep('stepOcr', plateText ? ('done — ' + triedCount + ' candidate(s) tried') : (triedCount + ' candidate(s), no match'));
+
+      if (winningRect) {
+        pctx.strokeStyle = '#38bdf8';
+        pctx.lineWidth = Math.max(2, Math.round(src.cols / 300));
+        pctx.strokeRect(winningRect.x, winningRect.y, winningRect.width, winningRect.height);
+      }
+
+      const cleanText = plateText.replace(/[^A-Z0-9]/gi, '').toUpperCase();
       ocrText.textContent = cleanText || '(no characters recognized)';
       setStatus('ready', 'Done');
 
@@ -674,10 +669,11 @@
       ocrText.textContent = 'Something went wrong reading this image — try another photo.';
       resultsEl.style.display = 'flex';
     } finally {
-      [src, gray, blurred, sobel, thresh, morph, element, hierarchy, plateColor, plateGray, plateThresh, ph, resized]
-        .forEach(m => { if (m && typeof m.delete === 'function') { try { m.delete(); } catch (e) {} } });
+      [src, gray, blur, edged, hierarchy].forEach(m => {
+        if (m && typeof m.delete === 'function') { try { m.delete(); } catch (e) {} }
+      });
+      scratch.forEach(m => { try { m.delete(); } catch (e) {} });
       if (contours) contours.delete();
-      if (pc) pc.delete();
       detectBtn.disabled = false;
       detectBtn.textContent = 'Detect plate';
     }
