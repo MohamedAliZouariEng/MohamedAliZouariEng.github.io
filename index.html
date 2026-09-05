@@ -208,11 +208,7 @@
   .portrait-frame::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
   .portrait-cap{font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);display:flex;justify-content:space-between;margin-top:10px;letter-spacing:0.02em;}
 
-  .hero-coords{
-    position:absolute;right:32px;bottom:40px;font-family:var(--font-mono);
-    font-size:11px;color:var(--text-faint);text-align:right;line-height:1.9;display:none;
-  }
-  @media(min-width:900px){.hero-coords{display:block;}}
+
 
   @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
   @media(prefers-reduced-motion:reduce){.hero-eyebrow,.hero h1,.hero-role,.hero-actions,.portrait{animation:none;opacity:1;}}
@@ -220,10 +216,7 @@
   /* ---------- section shared ---------- */
   section{padding:110px 0;border-top:1px solid var(--line);}
   .section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:56px;gap:24px;flex-wrap:wrap;}
-  .section-num{font-family:var(--font-mono);font-size:13px;color:var(--text-faint);}
   h2{font-family:var(--font-display);font-weight:600;font-size:clamp(1.8rem,3.4vw,2.6rem);letter-spacing:-0.01em;}
-  .section-sub{font-family:var(--font-mono);font-size:13px;color:var(--text-dim);max-width:280px;text-align:right;}
-  @media(max-width:700px){.section-sub{text-align:left;}}
 
   /* ---------- projects ---------- */
   .project-group{margin-top:70px;}
@@ -359,7 +352,7 @@
         <div>
           <div class="hero-eyebrow">INDUSTRIAL COMPUTER ENGINEER — ROBOTICS &amp; AI</div>
           <h1>Mohamed Ali<br>Zouari</h1>
-          <p class="hero-role">I design and simulate <strong>ROS2 &amp; Gazebo</strong> robotic systems and build the <strong>deep learning</strong> models that let them see, navigate and manipulate their world.</p>
+          <p class="hero-role"><strong>Industrial Computer Engineer</strong> specializing in robotics and <strong>ROS</strong> (Robot Operating System). Focused on integrating <strong>AI</strong> to develop innovative robotic solutions for complex industrial automation challenges. Proven ability to design, program, and deploy systems that enhance efficiency and solve real-world problems. Seeking to contribute technical expertise to an advanced robotics team.</p>
           <div class="hero-actions">
             <a href="#projects" class="btn btn-primary">View projects</a>
             <a href="https://github.com/MohamedAliZouariEng" target="_blank" rel="noopener" class="btn">GitHub ↗</a>
@@ -370,15 +363,11 @@
           <div class="portrait-frame tilt" id="portraitTilt">
             <img src="assets/portrait.png" alt="Portrait of Mohamed Ali Zouari">
           </div>
-          <div class="portrait-cap"><span>M.A.ZOUARI</span><span>SFAX, TN</span></div>
+          <div class="portrait-cap"><span>MOHAMED ALI ZOUARI</span><span>SFAX, TN</span></div>
         </div>
       </div>
     </div>
-    <div class="hero-coords">
-      LAT 34.7406° N — LON 10.7603° E<br>
-      SFAX, TUNISIA<br>
-      SYS: ROS2 JAZZY / GAZEBO SIM
-    </div>
+
   </section>
 
   <!-- PROJECTS -->
@@ -386,10 +375,8 @@
     <div class="wrap">
       <div class="section-head">
         <div>
-          <div class="section-num">01 — SELECTED WORK</div>
           <h2 style="margin-top:10px;">Projects</h2>
         </div>
-        <div class="section-sub">Simulation, navigation, manipulation and vision — built and tested in Gazebo.</div>
       </div>
 
       <div class="group-cards">
